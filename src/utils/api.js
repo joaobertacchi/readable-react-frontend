@@ -39,6 +39,18 @@ export type CommentUpdate = {
   body: string,
 };
 
+export const getInitialData = () => {
+  return Promise.all([
+    getCategories(),
+    getPosts(),
+  ]).then(([categories, posts]) => (
+    {
+      categories,
+      posts,
+    }
+  ));
+};
+
 export const getCategories = () =>
   fetch(`${api}/categories`, { headers })
     .then(res => res.json())
