@@ -7,12 +7,9 @@ import { type CategoryType } from './category';
 export type EntitiesState<EntityType> = {
   [string]: EntityType,
 };
-export type LocalState<EntityType> = {
-  entities: EntitiesState<EntityType>,
-};
 
-export type PostsStateType = LocalState<PostType>;
-export type CommentsStateType = LocalState<CommentType>;
+export type PostsStateType = EntitiesState<PostType>;
+export type CommentsStateType = EntitiesState<CommentType>;
 export type CategoriesStateType = Array<CategoryType>;
 
 export type GlobalStateType = {
