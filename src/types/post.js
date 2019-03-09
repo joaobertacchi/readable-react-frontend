@@ -1,6 +1,8 @@
 // @flow
 
-export type PostId = string;
+import { type IdType } from './shared';
+
+export type PostId = IdType;
 
 export type PostType = {
   id: PostId,
