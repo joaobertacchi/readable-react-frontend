@@ -13,7 +13,7 @@ export type LocalState<EntityType> = {
 
 export type PostsStateType = LocalState<PostType>;
 export type CommentsStateType = LocalState<CommentType>;
-export type CategoriesStateType = [CategoryType];
+export type CategoriesStateType = Array<CategoryType>;
 
 export type GlobalStateType = {
   categories: CategoriesStateType,
