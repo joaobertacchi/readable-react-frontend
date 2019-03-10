@@ -191,19 +191,19 @@ export const deleteComment = (commentId: CommentId): Promise<CommentType> =>
     },
   }).then((res: Response): Promise<CommentType> => res.json());
 
-  export type GetInitialDataResponse = {
-    categories: GetCategoriesResponse,
-    posts: GetPostsResponse,
-  }
-  
-  export const getInitialData = (): Promise<GetInitialDataResponse> => {
-    return Promise.all([
-      getCategories(),
-      getPosts(),
-    ]).then(([categories, posts]: Array<any>): GetInitialDataResponse => (
-      {
-        categories,
-        posts,
-      }
-    ));
-  };
+export type GetInitialDataResponse = {
+  categories: GetCategoriesResponse,
+  posts: GetPostsResponse,
+}
+
+export const getInitialData = (): Promise<GetInitialDataResponse> => {
+  return Promise.all([
+    getCategories(),
+    getPosts(),
+  ]).then(([categories, posts]: Array<any>): GetInitialDataResponse => (
+    {
+      categories,
+      posts,
+    }
+  ));
+};
