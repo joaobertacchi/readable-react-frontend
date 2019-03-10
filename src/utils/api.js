@@ -1,10 +1,16 @@
 // @flow
 
+import { type PostType, type PostId } from '../types/post';
+import { type CategoryType } from '../types/category';
+import { type CommentType, type CommentId } from '../types/comment';
+
 const api = 'http://localhost:3001';
 
 // Generate a unique token for storing your data on the backend server.
+//$FlowFixMe
 let token = localStorage.token;
 if (!token)
+//$FlowFixMe
   token = localStorage.token = Math.random().toString(36).substr(-8);
 
 const headers = {
@@ -12,38 +18,29 @@ const headers = {
   'Authorization': token
 };
 
-export type Post = {
-  id: string,
-  timestamp: Date,
-  title: string,
-  body: string,
-  author: string,
-  category: string,
-};
-
-export type PostUpdate = {
-  title: string,
-  body: string,
-};
-
 export type Comment = {
-  id: string,
-  timestamp: Date,
-  body: string,
   author: string,
+  body: string,
+  id: string,
   parentId: string,
+  timestamp: Date,
 };
 
 export type CommentUpdate = {
-  timestamp: ?Date,
   body: string,
+  timestamp: ?Date,
 };
 
-export const getInitialData = () => {
+export type GetInitialDataResponse = {
+  categories: GetCategoriesResponse,
+  posts: GetPostsResponse,
+}
+
+export const getInitialData = (): Promise<GetInitialDataResponse> => {
   return Promise.all([
     getCategories(),
     getPosts(),
-  ]).then(([categories, posts]) => (
+  ]).then(([categories, posts]: Array<any>): GetInitialDataResponse => (
     {
       categories,
       posts,
@@ -51,25 +48,38 @@ export const getInitialData = () => {
   ));
 };
 
-export const getCategories = () =>
-  fetch(`${api}/categories`, { headers })
-    .then(res => res.json())
-    .then(data => data.categories);
+export type GetCategoriesResponse = Array<CategoryType>;
 
-export const getPosts = (category: ?string) =>
+export const getCategories = (): Promise<GetCategoriesResponse> =>
+  fetch(`${api}/categories`, { headers })
+    .then((res: Response): Promise<{ categories: GetCategoriesResponse}> => res.json())
+    .then(({ categories }: { categories: GetCategoriesResponse}): GetCategoriesResponse => categories);
+
+export type GetPostsResponse = Array<PostType>;
+
+export const getPosts = (category: ?string): Promise<GetPostsResponse> =>
   typeof category === 'string' && category.length > 0
   ? fetch(`${api}/${category}/posts`, { headers })
-    .then(res => res.json())
+    .then((res: Response): Promise<GetPostsResponse> => res.json())
   : fetch(`${api}/posts`, { headers })
-    .then(res => res.json());
+    .then((res: Response): Promise<GetPostsResponse> => res.json());
 
-export const getPost = (postId: string) =>
+export const getPost = (postId: string): ?Promise<PostType> =>
   typeof postId === 'string' && postId.length > 0
   ? fetch(`${api}/posts/${postId}`, { headers })
-    .then(res => res.json())
+    .then((res: Response): Promise<PostType> => res.json())
   : null;
 
-export const addPost = (post: Post) =>
+export type AddPostRequest = {
+  author: string,
+  body: string,
+  category: string,
+  id: PostId,
+  timestamp: number,
+  title: string,
+};
+
+export const addPost = (post: AddPostRequest): Promise<PostType> =>
   fetch(`${api}/posts`, {
     method: 'POST',
     headers: {
@@ -77,9 +87,9 @@ export const addPost = (post: Post) =>
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(post)
-  }).then(res => res.json());
+  }).then((res: Response): Promise<PostType> => res.json());
 
-const votePost = (postId: string, up: boolean) =>
+const votePost = (postId: PostId, up: boolean): Promise<PostType> =>
   fetch(`${api}/posts/${postId}`, {
     method: 'POST',
     headers: {
@@ -89,15 +99,23 @@ const votePost = (postId: string, up: boolean) =>
     body: JSON.stringify({
       option: up ? 'upVote' : 'downVote',
     })
-  }).then(res => res.json());
+  }).then((res: Response): Promise<PostType> => res.json());
 
-export const upVotePost = (postId: string) =>
+export const upVotePost = (postId: PostId): Promise<PostType>  =>
   votePost(postId, true);
 
-export const downVotePost = (postId: string) =>
+export const downVotePost = (postId: PostId): Promise<PostType> =>
   votePost(postId, false);
 
-export const updatePost = (postId: string, postUpdate: PostUpdate) =>
+export type UpdatePostRequest = {
+  author: string,
+  body: string,
+  category: string,
+  timestamp: number,
+  title: string,
+};
+
+export const updatePost = (postId: PostId, postUpdate: UpdatePostRequest): Promise<PostType> =>
   fetch(`${api}/posts/${postId}`, {
     method: 'PUT',
     headers: {
@@ -105,22 +123,32 @@ export const updatePost = (postId: string, postUpdate: PostUpdate) =>
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(postUpdate)
-  }).then(res => res.json());
+  }).then((res: Response): Promise<PostType> => res.json());
 
-export const deletePost = (postId: string) =>
+export const deletePost = (postId: PostId): Promise<PostType> =>
   fetch(`${api}/posts/${postId}`, {
     method: 'DELETE',
     headers: {
       ...headers,
       'Content-Type': 'application/json'
     },
-  }).then(res => res.json());
+  }).then((res: Response): Promise<PostType> => res.json());
 
-export const getComments = (postId: string) =>
+export type GetCommentsResponse = Array<CommentType>;
+
+export const getComments = (postId: PostId): Promise<GetCommentsResponse> =>
   fetch(`${api}/posts/${postId}/comments`, { headers })
-    .then(res => res.json());
+    .then((res: Response): Promise<GetCommentsResponse> => res.json());
 
-export const addComment = (comment: Comment) =>
+export type AddCommentRequest = {
+  author: string,
+  body: string,
+  id: CommentId,
+  parentId: PostId,
+  timestamp: number,
+};
+
+export const addComment = (comment: AddCommentRequest): Promise<CommentType> =>
   fetch(`${api}/comments`, {
     method: 'POST',
     headers: {
@@ -128,15 +156,15 @@ export const addComment = (comment: Comment) =>
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(comment)
-  }).then(res => res.json());
+  }).then((res: Response): Promise<CommentType> => res.json());
 
-export const getComment = (commentId: string) =>
+export const getComment = (commentId: string): ?Promise<CommentType> =>
   typeof commentId === 'string' && commentId.length > 0
   ? fetch(`${api}/comments/${commentId}`, { headers })
-    .then(res => res.json())
+    .then((res: Response): Promise<CommentType> => res.json())
   : null;
 
-const voteComment = (commentId: string, up: boolean) =>
+const voteComment = (commentId: CommentId, up: boolean): Promise<CommentType> =>
   fetch(`${api}/comments/${commentId}`, {
     method: 'POST',
     headers: {
@@ -146,15 +174,22 @@ const voteComment = (commentId: string, up: boolean) =>
     body: JSON.stringify({
       option: up ? 'upVote' : 'downVote',
     })
-  }).then(res => res.json());
+  }).then((res: Response): Promise<CommentType> => res.json());
 
-export const upVoteComment = (commentId: string) =>
+export const upVoteComment = (commentId: CommentId): Promise<CommentType> =>
   voteComment(commentId, true);
 
-export const downVoteComment = (commentId: string) =>
+export const downVoteComment = (commentId: CommentId): Promise<CommentType> =>
   voteComment(commentId, false);
 
-export const updateComment = (commentId: string, commentUpdate: CommentUpdate) =>
+export type UpdateCommentRequest = {
+  author: string,
+  body: string,
+  parentId: PostId,
+  timestamp: number,
+};
+
+export const updateComment = (commentId: CommentId, commentUpdate: UpdateCommentRequest): Promise<CommentType> =>
   fetch(`${api}/comments/${commentId}`, {
     method: 'PUT',
     headers: {
@@ -162,13 +197,13 @@ export const updateComment = (commentId: string, commentUpdate: CommentUpdate) =
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(commentUpdate)
-  }).then(res => res.json());
+  }).then((res: Response): Promise<CommentType> => res.json());
 
-export const deleteComment = (commentId: string) =>
+export const deleteComment = (commentId: CommentId): Promise<CommentType> =>
   fetch(`${api}/comments/${commentId}`, {
     method: 'DELETE',
     headers: {
       ...headers,
       'Content-Type': 'application/json'
     },
-  }).then(res => res.json());
+  }).then((res: Response): Promise<CommentType> => res.json());
