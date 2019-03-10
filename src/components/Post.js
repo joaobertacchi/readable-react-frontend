@@ -7,17 +7,22 @@ import { Link } from 'react-router-dom';
 
 import { type PostId } from '../types/post';
 import { type GlobalStateType, type PostsStateType } from '../types/state';
+import { handleVotePost, type Vote } from '../actions/posts';
 
 type StateProps = {
   loading: boolean,
   posts: PostsStateType,
 }
 
+type DispatchProps = {
+  dispatchVote: Function,
+};
+
 type OwnProps = {
   postId: PostId,
 };
 
-type Props = StateProps & OwnProps;
+type Props = StateProps & OwnProps & DispatchProps;
 
 const styles = {
   post: {
@@ -27,7 +32,7 @@ const styles = {
 };
 
 const Post = (props: Props): React$Node => {
-  const { postId, posts, loading } = props;
+  const { postId, posts, loading, dispatchVote } = props;
 
   if (loading) return null;
 
@@ -58,6 +63,8 @@ const Post = (props: Props): React$Node => {
         <span>Created in {date}</span>
         <br />
         <span>Score: {voteScore}</span>
+        <input type='button' onClick={(): void => dispatchVote({postId, option: 'up'})} value='Up' />
+        <input type='button' onClick={(): void => dispatchVote({postId, option: 'down'})} value='Down' />
         <br />
         <span>
           {commentCount} comment{commentCount > 1 ? 's' : ''}
@@ -76,4 +83,8 @@ function mapStateToProps({ posts }: GlobalStateType): StateProps {
   };
 }
 
-export default connect(mapStateToProps)(Post);
+const mapDispatchToProps = (dispatch: Function): Object => ({
+  dispatchVote: (vote: Vote): void => dispatch(handleVotePost(vote)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Post);

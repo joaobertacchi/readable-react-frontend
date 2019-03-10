@@ -1,19 +1,53 @@
 // @flow
 
-import { type PostType } from '../types/post';
+import { type PostType, type PostId } from '../types/post';
+import { upVotePost, downVotePost } from '../utils/api';
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const ADD_POST = 'ADD_POST';
 export const DELETE_POST = 'DELETE_POST';
+export const VOTE_POST = 'VOTE_POST';
 
-export type ReceivePostsActionType = {
+export type Vote = {
+  option: 'up' | 'down',
+  postId: PostId,
+};
+
+type VotePostActionType = {
+  type: 'VOTE_POST',
+  vote: Vote,
+};
+
+type ReceivePostsActionType = {
   posts: Array<PostType>,
   type: 'RECEIVE_POSTS',
 };
+
+export type PostsActionType = ReceivePostsActionType | VotePostActionType;
 
 export function receivePosts(posts: Array<PostType>): ReceivePostsActionType {
   return {
     type: RECEIVE_POSTS,
     posts,
+  };
+}
+
+export function votePost(vote: Vote): VotePostActionType {
+  return {
+    type: VOTE_POST,
+    vote,
+  };
+}
+
+export function handleVotePost(vote: Vote): Function {
+  return (dispatch: Function): ?Promise<void> => {
+    if (vote.option === 'up')
+      return upVotePost(vote.postId)
+        .then((): void => dispatch(votePost(vote)));
+    else if (vote.option === 'down')
+      return downVotePost(vote.postId)
+        .then((): void => dispatch(votePost(vote)));
+    else
+      return;
   };
 }
