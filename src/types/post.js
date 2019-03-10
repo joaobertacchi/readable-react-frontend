@@ -9,6 +9,7 @@ export type PostType = {
   body: string,
   category: string,
   commentCount: number,
+  deleted: boolean,
   id: PostId,
   timestamp: number,
   title: string,
