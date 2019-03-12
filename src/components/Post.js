@@ -5,13 +5,13 @@ import { Input, Grid, Paper } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { type PostId } from '../types/post';
-import { type GlobalStateType, type PostsStateType } from '../types/state';
+import { type PostId, type PostType } from '../types/post';
+import { type GlobalStateType } from '../types/state';
 import { handleVotePost, type Vote } from '../actions/posts';
 
 type StateProps = {
   loading: boolean,
-  posts: PostsStateType,
+  post: PostType,
 }
 
 type DispatchProps = {
@@ -32,11 +32,10 @@ const styles = {
 };
 
 const Post = (props: Props): React$Node => {
-  const { postId, posts, loading, dispatchVote } = props;
+  const { postId, post, loading, dispatchVote } = props;
 
   if (loading) return null;
 
-  const post = posts[postId];
   const {
     title,
     body,
@@ -76,10 +75,10 @@ const Post = (props: Props): React$Node => {
   );
 };
 
-function mapStateToProps({ posts }: GlobalStateType): StateProps {
+function mapStateToProps({ posts }: GlobalStateType, { postId }: OwnProps): StateProps {
   return {
-    posts,
-    loading: !posts || Object.keys(posts).length === 0,
+    post: posts[postId],
+    loading: !posts[postId],
   };
 }
 
