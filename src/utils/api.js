@@ -1,5 +1,7 @@
 // @flow
 
+import uuidv4 from 'uuid/v4';
+
 import { type PostType, type PostId } from '../types/post';
 import { type CategoryType } from '../types/category';
 import { type CommentType, type CommentId } from '../types/comment';
@@ -69,7 +71,11 @@ export const addPost = (post: AddPostRequest): Promise<PostType> =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(post)
+    body: JSON.stringify({
+      ...post,
+      id: uuidv4(),
+      timestamp: new Date().getTime(),
+    })
   }).then((res: Response): Promise<PostType> => res.json());
 
 const votePost = (postId: PostId, up: boolean): Promise<PostType> =>
