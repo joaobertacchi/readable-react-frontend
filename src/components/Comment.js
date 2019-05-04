@@ -11,6 +11,7 @@ import { handleVoteComment, handleDeleteComment, type VoteOption } from '../acti
 
 import ReadableHeader from './ReadableHeader';
 import VotesHeader from './VotesHeader';
+import ActionButtons from './ActionButtons';
 
 const styles = (): Object => ({
   post: {
@@ -62,6 +63,7 @@ const Comment = (props: Props): React$Node => {
           vote={dispatchVote}
         />
         <Input type="text" multiline={true} placeholder="Body" value={body} />
+        <ActionButtons />
       </Paper>
     </Grid>
   );
