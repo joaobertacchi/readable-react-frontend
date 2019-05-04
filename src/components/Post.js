@@ -124,7 +124,6 @@ const Post = (props: Props): React$Node => {
         </div>
         {showButtons &&
           <div>
-            {/* TODO: Add edit action */}
             <IconButton
               aria-label="Edit"
               className={classes.button}
