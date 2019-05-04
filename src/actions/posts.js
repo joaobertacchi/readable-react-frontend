@@ -1,15 +1,24 @@
 // @flow
 
 import { type PostType, type PostId } from '../types/post';
-import { upVotePost, downVotePost } from '../utils/api';
+import {
+  upVotePost,
+  downVotePost,
+  addPost,
+  deletePost,
+  updatePost,
+} from '../utils/api';
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const ADD_POST = 'ADD_POST';
 export const DELETE_POST = 'DELETE_POST';
+export const UPDATE_POST = 'UPDATE_POST';
 export const VOTE_POST = 'VOTE_POST';
 
+export type VoteOption = 'up' | 'down';
+
 export type Vote = {
-  option: 'up' | 'down',
+  option: VoteOption,
   postId: PostId,
 };
 
@@ -23,7 +32,27 @@ type ReceivePostsActionType = {
   type: 'RECEIVE_POSTS',
 };
 
-export type PostsActionType = ReceivePostsActionType | VotePostActionType;
+type AddPostActionType = {
+  post: PostType,
+  type: 'ADD_POST',
+};
+
+type DeletePostActionType = {
+  postId: PostId,
+  type: 'DELETE_POST',
+};
+
+type UpdatePostActionType = {
+  post: PostType,
+  type: 'UPDATE_POST',
+}
+
+export type PostActionType =
+  AddPostActionType |
+  DeletePostActionType |
+  UpdatePostActionType |
+  ReceivePostsActionType |
+  VotePostActionType;
 
 export function receivePosts(posts: Array<PostType>): ReceivePostsActionType {
   return {
@@ -39,6 +68,21 @@ export function votePost(vote: Vote): VotePostActionType {
   };
 }
 
+export const addPostAction = (post: PostType): AddPostActionType => ({
+  type: ADD_POST,
+  post,
+});
+
+export const deletePostAction = (postId: PostId): DeletePostActionType => ({
+  type: DELETE_POST,
+  postId,
+});
+
+export const updatePostAction = (post: PostType): UpdatePostActionType => ({
+  type: UPDATE_POST,
+  post,
+});
+
 export function handleVotePost(vote: Vote): Function {
   return (dispatch: Function): ?Promise<void> => {
     if (vote.option === 'up')
@@ -51,3 +95,24 @@ export function handleVotePost(vote: Vote): Function {
       return;
   };
 }
+
+export const handleAddPost = (
+  post: PostType,
+): Function => (dispatch: Function): ?Promise<void> => {
+  return addPost(post)
+    .then((result: PostType): void => dispatch(addPostAction(result)));
+};
+
+export const handleUpdatePost = (
+  post: PostType,
+): Function => (dispatch: Function): ?Promise<void> => {
+  return updatePost(post.id, post)
+    .then((result: PostType): void => dispatch(updatePostAction(result)));
+};
+
+export const handleDeletePost = (
+  postId: PostId,
+): Function => (dispatch: Function): ?Promise<void> => {
+  return deletePost(postId)
+    .then((post: PostType): void => dispatch(deletePostAction(post.id)));
+};
