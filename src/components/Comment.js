@@ -62,9 +62,6 @@ const Comment = (props: Props): React$Node => {
           vote={dispatchVote}
         />
         <Input type="text" multiline={true} placeholder="Body" value={body} />
-        <br />
-        <span>Score: {voteScore}</span>
-        <br />
       </Paper>
     </Grid>
   );
