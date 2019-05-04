@@ -18,9 +18,18 @@ const comments = (state: CommentsStateType = {}, action: CommentActionType): Com
         ...state,
         ...action.comments.reduce((acc: CommentsStateType, comment: CommentType): CommentsStateType => ({ ...acc, [comment.id]: comment}), {}),
       };
+    case VOTE_COMMENT:
+      if (['up', 'down'].includes(action.vote.option))
+        return {
+          ...state,
+          [action.vote.commentId]: {
+            ...state[action.vote.commentId],
+            voteScore: state[action.vote.commentId].voteScore + (action.vote.option === 'up' ? 1 :  -1 ),
+          },
+        };
+      return state;
     case ADD_COMMENT:
     case DELETE_COMMENT:
-    case VOTE_COMMENT:
     case UPDATE_COMMENT:
     default:
       return state;
