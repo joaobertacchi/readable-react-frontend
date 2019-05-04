@@ -1,9 +1,8 @@
 //@flow
 
 import React from 'react';
-import { Grid, Paper, Typography, IconButton } from '@material-ui/core';
+import { Grid, Paper, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { Edit, Delete } from '@material-ui/icons';
 import { connect } from 'react-redux';
 
 import { type PostId, type PostType } from '../types/post';
@@ -12,6 +11,7 @@ import { handleVotePost, handleDeletePost, type VoteOption } from '../actions/po
 
 import ReadableHeader from './ReadableHeader';
 import VotesHeader from './VotesHeader';
+import ActionButtons from './ActionButtons';
 
 type StateProps = {
   loading: boolean,
@@ -93,6 +93,8 @@ const Post = (props: Props): React$Node => {
 
   const date = new Date(timestamp).toISOString();
 
+  const onDelete = (): void => deletePost(postId);
+
   return (
     <Grid item sm={12}>
       <Paper className={classes.post}>
@@ -123,25 +125,10 @@ const Post = (props: Props): React$Node => {
           </Typography>
         </div>
         {showButtons &&
-          <div>
-            <IconButton
-              aria-label="Edit"
-              className={classes.button}
-              onClick={onEdit}
-              color="secondary"
-              size="small"
-            >
-              <Edit />
-            </IconButton>
-            <IconButton
-              aria-label="Delete"
-              className={classes.button}
-              onClick={(): void => deletePost(postId)}
-              size="small"
-            >
-              <Delete />
-            </IconButton>
-        </div>
+          <ActionButtons
+            onDelete={onDelete}
+            onEdit={onEdit}
+          />
         }
       </Paper>
     </Grid>
