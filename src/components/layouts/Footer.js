@@ -13,6 +13,8 @@ const styles = (): Object => ({
   footer: {
     position: 'fixed',
     bottom: 0,
+    left: '50%',
+    transform: 'translateX(-50%)',
   },
 });
 
