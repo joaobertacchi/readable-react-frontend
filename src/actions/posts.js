@@ -14,6 +14,7 @@ export const ADD_POST = 'ADD_POST';
 export const DELETE_POST = 'DELETE_POST';
 export const UPDATE_POST = 'UPDATE_POST';
 export const VOTE_POST = 'VOTE_POST';
+export const UPDATE_COMMENT_COUNT = 'UPDATE_COMMENT_COUNT';
 
 export type VoteOption = 'up' | 'down';
 
@@ -45,14 +46,23 @@ type DeletePostActionType = {
 type UpdatePostActionType = {
   post: PostType,
   type: 'UPDATE_POST',
-}
+};
+
+export type UpdateCommentCountOperationType = 'inc' | 'dec';
+
+type UpdateCommentCountActionType = {
+  operation: UpdateCommentCountOperationType,
+  postId: PostId,
+  type: 'UPDATE_COMMENT_COUNT',
+};
 
 export type PostActionType =
   AddPostActionType |
   DeletePostActionType |
   UpdatePostActionType |
   ReceivePostsActionType |
-  VotePostActionType;
+  VotePostActionType |
+  UpdateCommentCountActionType;
 
 export function receivePosts(posts: Array<PostType>): ReceivePostsActionType {
   return {
@@ -81,6 +91,12 @@ export const deletePostAction = (postId: PostId): DeletePostActionType => ({
 export const updatePostAction = (post: PostType): UpdatePostActionType => ({
   type: UPDATE_POST,
   post,
+});
+
+export const updateCommentCountAction = (postId: PostId, operation: UpdateCommentCountOperationType): UpdateCommentCountActionType => ({
+  type: UPDATE_COMMENT_COUNT,
+  postId,
+  operation,
 });
 
 export function handleVotePost(vote: Vote): Function {
