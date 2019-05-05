@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { handleInitialComments } from '../actions/comments';
 import Comment from './Comment';
 import { type PostId } from '../types/post';
-import { type CommentId } from '../types/comment';
-import { type CommentsStateType, type PostsStateType, type GlobalStateType } from '../types/state';
+import { type CommentId, type CommentType } from '../types/comment';
+import { type PostsStateType, type GlobalStateType } from '../types/state';
 import CommentListHeader from './CommentListHeader';
 
 type OwnProps = {
@@ -18,7 +18,7 @@ type ConnectedProps = {
 };
 
 type StateProps = {
-  comments: CommentsStateType,
+  commentIds: Array<CommentId>,
   loading: boolean,
   posts: PostsStateType,
 };
@@ -32,7 +32,7 @@ class CommentList extends React.Component<Props> {
   }
 
   render (): React$Node {
-    const { comments, loading } = this.props;
+    const { commentIds, loading } = this.props;
 
     if (loading)
       return null;
@@ -41,17 +41,22 @@ class CommentList extends React.Component<Props> {
       <React.Fragment>
       <CommentListHeader />
         {
-          Object.keys(comments).map((id: CommentId): React$Node =>
-            <Comment key={id} commentId={id} />)
+          commentIds.map((commentId: CommentId): React$Node =>
+            <Comment key={commentId} commentId={commentId} />)
         }
       </React.Fragment>
     );
   }
 }
 
-function mapStateToProps({ comments, posts }: GlobalStateType): StateProps {
+function mapStateToProps({ comments, posts }: GlobalStateType, { postId }: OwnProps): StateProps {
   return {
-    comments,
+    commentIds: Object.values(comments)
+      .filter(
+        // $FlowFixMe
+        (comment: CommentType): boolean =>
+          (comment.parentId === postId))
+      .map((comment: CommentType): CommentId => (comment.id)),
     posts,
     loading: !posts || Object.keys(posts).length === 0 || !comments || Object.keys(comments).length === 0,
   };
