@@ -24,7 +24,7 @@ const styles = (): Object => ({
 
 const handleVote = (option: string, vote: Function): Function => (): void => vote(option);
 
-const VotesHeader = ({ voteScore, vote, classes }: Props): React$Node => (
+const VoteButtons = ({ voteScore, vote, classes }: Props): React$Node => (
   <div>
     <IconButton
       className={classes.button}
@@ -46,4 +46,4 @@ const VotesHeader = ({ voteScore, vote, classes }: Props): React$Node => (
   </div>
 );
 
-export default withStyles(styles)(VotesHeader);
+export default withStyles(styles)(VoteButtons);

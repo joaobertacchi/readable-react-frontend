@@ -10,7 +10,7 @@ import { type GlobalStateType } from '../types/state';
 import { handleVotePost, handleDeletePost, type VoteOption } from '../actions/posts';
 
 import ReadableHeader from './ReadableHeader';
-import VotesHeader from './VotesHeader';
+import VoteButtons from './VoteButtons';
 import ActionButtons from './ActionButtons';
 
 type StateProps = {
@@ -129,7 +129,7 @@ const Post = (props: Props): React$Node => {
           >
             {commentCount} comment{commentCount > 1 ? 's' : ''}
           </Typography>
-          <VotesHeader
+          <VoteButtons
             voteScore={voteScore}
             vote={dispatchVote}
           />

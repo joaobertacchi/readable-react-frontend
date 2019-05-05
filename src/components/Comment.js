@@ -10,7 +10,7 @@ import { type CommentId } from '../types/comment';
 import { handleVoteComment, handleDeleteComment, type VoteOption } from '../actions/comments';
 
 import ReadableHeader from './ReadableHeader';
-import VotesHeader from './VotesHeader';
+import VoteButtons from './VoteButtons';
 import ActionButtons from './ActionButtons';
 
 const styles = (): Object => ({
@@ -69,7 +69,7 @@ const Comment = (props: Props): React$Node => {
           <ActionButtons
             onDelete={onDelete}
           />
-          <VotesHeader
+          <VoteButtons
             voteScore={voteScore}
             vote={dispatchVote}
           />
