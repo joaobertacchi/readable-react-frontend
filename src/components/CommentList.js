@@ -6,8 +6,13 @@ import { handleInitialComments } from '../actions/comments';
 import Comment from './Comment';
 import { type PostId } from '../types/post';
 import { type CommentId, type CommentType } from '../types/comment';
-import { type PostsStateType, type GlobalStateType } from '../types/state';
+import { type GlobalStateType } from '../types/state';
 import CommentListHeader from './CommentListHeader';
+import CommentModal from './CommentModal';
+
+type State = {
+  commentOpen: boolean,
+};
 
 type OwnProps = {
   postId: PostId,
@@ -19,27 +24,45 @@ type ConnectedProps = {
 
 type StateProps = {
   commentIds: Array<CommentId>,
-  loading: boolean,
-  posts: PostsStateType,
 };
 
 type Props = ConnectedProps & OwnProps & StateProps;
 
-class CommentList extends React.Component<Props> {
+class CommentList extends React.Component<Props, State> {
+  state = {
+    commentOpen: false,
+  };
+
+  state: State;
+
   componentDidMount() {
     const { postId } = this.props;
     this.props.dispatch(handleInitialComments(postId));
   }
 
-  render (): React$Node {
-    const { commentIds, loading } = this.props;
+  handleOpen = () => {
+    this.setState({ commentOpen: true });
+  };
+  
+  handleClose = () => {
+    this.setState({ commentOpen: false });
+  };
 
-    if (loading)
-      return null;
+  render (): React$Node {
+    const {
+      commentIds,
+    } = this.props;
+
+    const { commentOpen } = this.state;
 
     return (
       <React.Fragment>
-      <CommentListHeader />
+        <CommentModal
+          modalTitle="Add new comment"
+          onClose={this.handleClose}
+          open={commentOpen}
+        />
+        <CommentListHeader onOpen={this.handleOpen} />
         {
           commentIds.map((commentId: CommentId): React$Node =>
             <Comment key={commentId} commentId={commentId} />)
@@ -49,7 +72,7 @@ class CommentList extends React.Component<Props> {
   }
 }
 
-function mapStateToProps({ comments, posts }: GlobalStateType, { postId }: OwnProps): StateProps {
+function mapStateToProps({ comments }: GlobalStateType, { postId }: OwnProps): StateProps {
   return {
     commentIds: Object.values(comments)
       .filter(
@@ -57,8 +80,6 @@ function mapStateToProps({ comments, posts }: GlobalStateType, { postId }: OwnPr
         (comment: CommentType): boolean =>
           (comment.parentId === postId))
       .map((comment: CommentType): CommentId => (comment.id)),
-    posts,
-    loading: !posts || Object.keys(posts).length === 0 || !comments || Object.keys(comments).length === 0,
   };
 }
 
