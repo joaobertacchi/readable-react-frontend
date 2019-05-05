@@ -9,7 +9,7 @@ import {
   UPDATE_COMMENT,
 } from '../actions/comments';
 import { type CommentsStateType } from '../types/state';
-import { type CommentType } from '../types/comment';
+import { type CommentType, type CommentId } from '../types/comment';
 
 const comments = (state: CommentsStateType = {}, action: CommentActionType): CommentsStateType => {
   switch(action.type) {
@@ -28,8 +28,20 @@ const comments = (state: CommentsStateType = {}, action: CommentActionType): Com
           },
         };
       return state;
+    case DELETE_COMMENT: {
+      const { commentId } = action;
+      return Object.entries(state).reduce(
+          (acc: CommentsStateType, [key, value]: [CommentId, any]): CommentsStateType => (
+            key !== commentId
+              ? {
+                  ...acc,
+                  [key]: value,
+                }
+              : acc),
+          {}
+        );
+    }
     case ADD_COMMENT:
-    case DELETE_COMMENT:
     case UPDATE_COMMENT:
     default:
       return state;
