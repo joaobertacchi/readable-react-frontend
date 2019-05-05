@@ -29,7 +29,7 @@ type OwnProps = {
 };
 
 type DispatchProps = {
-  deletePost: Function,
+  deleteComment: Function,
   dispatchVote: Function,
 };
 
@@ -40,7 +40,7 @@ type StyleProps = {
 type Props = StateProps & OwnProps & StyleProps & DispatchProps;
 
 const Comment = (props: Props): React$Node => {
-  const { commentId, comments, classes, dispatchVote } = props;
+  const { commentId, comments, classes, dispatchVote, deleteComment } = props;
   const comment = comments[commentId];
   const {
     author,
@@ -50,6 +50,7 @@ const Comment = (props: Props): React$Node => {
   } = comment;
 
   const date = new Date(timestamp).toISOString();
+  const onDelete = (): void => deleteComment(commentId);
 
   return (
     <Grid item sm={12}>
@@ -63,7 +64,9 @@ const Comment = (props: Props): React$Node => {
           vote={dispatchVote}
         />
         <Input type="text" multiline={true} placeholder="Body" value={body} />
-        <ActionButtons />
+        <ActionButtons
+          onDelete={onDelete}
+        />
       </Paper>
     </Grid>
   );
@@ -77,7 +80,7 @@ function mapStateToProps({ comments }: GlobalStateType): StateProps {
 
 const mapDispatchToProps = (dispatch: Function, { commentId }: OwnProps): Object => ({
   dispatchVote: (option: VoteOption): void => dispatch(handleVoteComment({commentId, option})),
-  deletePost: (commentId: CommentId): void => dispatch(handleDeleteComment(commentId)),
+  deleteComment: (commentId: CommentId): void => dispatch(handleDeleteComment(commentId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Comment));
