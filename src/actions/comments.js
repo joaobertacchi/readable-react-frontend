@@ -5,6 +5,8 @@ import { type CommentType } from '../types/comment';
 import { type PostId } from '../types/post';
 import { type CommentId } from '../types/comment';
 
+import { updateCommentCountAction } from './posts';
+
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
@@ -111,8 +113,9 @@ export const handleUpdateComment = (
 export const handleDeleteComment = (commentId: CommentId): Function => {
   return (dispatch: Function): Promise<void> => {
     return API.deleteComment(commentId)
-      .then(({ id }: CommentType) => {
+      .then(({ id, parentId }: CommentType) => {
         dispatch(deleteCommentAction(id));
+        dispatch(updateCommentCountAction(parentId, 'dec'));
       });
   };
 };
