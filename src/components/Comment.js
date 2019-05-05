@@ -17,7 +17,12 @@ const styles = (): Object => ({
   post: {
     padding: 20,
     margin: 10
-  }
+  },
+  footer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 });
 
 type StateProps = {
@@ -59,14 +64,16 @@ const Comment = (props: Props): React$Node => {
           date={date}
           author={author}
         />
-        <VotesHeader
-          voteScore={voteScore}
-          vote={dispatchVote}
-        />
         <Input type="text" multiline={true} placeholder="Body" value={body} />
-        <ActionButtons
-          onDelete={onDelete}
-        />
+        <div className={classes.footer}>
+          <ActionButtons
+            onDelete={onDelete}
+          />
+          <VotesHeader
+            voteScore={voteScore}
+            vote={dispatchVote}
+          />
+        </div>
       </Paper>
     </Grid>
   );

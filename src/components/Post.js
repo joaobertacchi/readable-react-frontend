@@ -54,9 +54,10 @@ const styles = (theme: Object): Object => ({
   leftHeader: {
     
   },
-  rightHeader: {
+  footer: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   bodyContainer: {
@@ -107,29 +108,32 @@ const Post = (props: Props): React$Node => {
             author={author}
             category={category}
           />
-          <div className={classes.rightHeader}>
-            <VotesHeader
-              voteScore={voteScore}
-              vote={dispatchVote}
-            />
-            <div>
-              <Typography variant="caption" paragraph={true} color="textPrimary">
-                {commentCount} comment{commentCount > 1 ? 's' : ''}
-              </Typography>
-            </div>
-          </div>
         </div>
         <div className={classes.bodyContainer}>
           <Typography variant="body2" paragraph={true} color="textPrimary">
             {body}
           </Typography>
         </div>
-        {showButtons &&
-          <ActionButtons
-            onDelete={onDelete}
-            onEdit={onEdit}
+        <div className={classes.footer}>
+          {showButtons
+            ? <ActionButtons
+                onDelete={onDelete}
+                onEdit={onEdit}
+              />
+            : <div></div>
+          }
+          <Typography
+            variant="caption"
+            color="textPrimary"
+            gutterBottom={false}
+          >
+            {commentCount} comment{commentCount > 1 ? 's' : ''}
+          </Typography>
+          <VotesHeader
+            voteScore={voteScore}
+            vote={dispatchVote}
           />
-        }
+        </div>
       </Paper>
     </Grid>
   );
