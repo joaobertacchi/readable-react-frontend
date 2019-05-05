@@ -10,6 +10,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 
 import { type CategoriesStateType } from '../types/state';
 import { type CommentType } from '../types/comment';
+import { type PostId } from '../types/post';
 import { handleAddComment, handleUpdateComment } from '../actions/comments';
 
 import { connect } from 'react-redux';
@@ -60,6 +61,7 @@ const styles = (theme: Object): Object => ({
 type State = {
   author: string,
   body: string,
+  parentId: PostId,
 };
 
 type OwnProps = {
@@ -69,6 +71,7 @@ type OwnProps = {
   modalTitle: string,
   onClose: Function,
   open: boolean,
+  parentId: PostId,
 };
 
 type DispatchedProps = {
@@ -85,11 +88,13 @@ class CommentModal extends React.PureComponent<Props, State> {
       id,
       author,
       body,
+      parentId,
     } = comment || {};
     this.state = {
       id,
       author: author || '',
       body: body || '',
+      parentId,
     };
   }
 

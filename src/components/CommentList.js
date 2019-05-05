@@ -51,6 +51,7 @@ class CommentList extends React.Component<Props, State> {
   render (): React$Node {
     const {
       commentIds,
+      postId,
     } = this.props;
 
     const { commentOpen } = this.state;
@@ -61,6 +62,7 @@ class CommentList extends React.Component<Props, State> {
           modalTitle="Add new comment"
           onClose={this.handleClose}
           open={commentOpen}
+          comment={{ parentId: postId }}
         />
         <CommentListHeader onOpen={this.handleOpen} />
         {
