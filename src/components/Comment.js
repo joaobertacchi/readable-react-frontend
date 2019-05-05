@@ -1,7 +1,7 @@
 //@flow
 
 import React from 'react';
-import { Input, Grid, Paper } from '@material-ui/core';
+import { Grid, Paper, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 
@@ -22,6 +22,9 @@ const styles = (): Object => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  bodyContainer: {
+    marginTop: 20,
   },
 });
 
@@ -64,7 +67,11 @@ const Comment = (props: Props): React$Node => {
           date={date}
           author={author}
         />
-        <Input type="text" multiline={true} placeholder="Body" value={body} />
+        <div className={classes.bodyContainer}>
+          <Typography variant="body2" paragraph={true} color="textPrimary">
+            {body}
+          </Typography>
+        </div>
         <div className={classes.footer}>
           <ActionButtons
             onDelete={onDelete}
