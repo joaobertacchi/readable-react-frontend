@@ -7,6 +7,7 @@ import {
   DELETE_POST,
   VOTE_POST,
   UPDATE_POST,
+  UPDATE_COMMENT_COUNT,
 } from '../actions/posts';
 
 import { type PostsStateType } from '../types/state';
@@ -39,6 +40,16 @@ const posts = (state: PostsStateType = {}, action: PostActionType): PostsStateTy
               : acc),
           {}
         );
+    }
+    case UPDATE_COMMENT_COUNT: {
+      const { postId, operation } = action;
+      return {
+        ...state,
+        [postId]: {
+          ...state[postId],
+          commentCount: operation === 'dec' ? state[postId].commentCount - 1 : state[postId].commentCount + 1,
+        },
+      };
     }
     case UPDATE_POST: {
       const { post } = action;
