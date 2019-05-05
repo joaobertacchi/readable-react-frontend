@@ -144,7 +144,11 @@ export const addComment = (comment: AddCommentRequest): Promise<CommentType> =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(comment)
+    body: JSON.stringify({
+      ...comment,
+      id: uuidv4(),
+      timestamp: new Date().getTime(),
+    })
   }).then((res: Response): Promise<CommentType> => res.json());
 
 export const getComment = (commentId: string): ?Promise<CommentType> =>
