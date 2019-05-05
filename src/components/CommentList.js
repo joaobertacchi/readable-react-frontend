@@ -7,6 +7,7 @@ import Comment from './Comment';
 import { type PostId } from '../types/post';
 import { type CommentId } from '../types/comment';
 import { type CommentsStateType, type PostsStateType, type GlobalStateType } from '../types/state';
+import CommentListHeader from './CommentListHeader';
 
 type OwnProps = {
   postId: PostId,
@@ -36,8 +37,15 @@ class CommentList extends React.Component<Props> {
     if (loading)
       return null;
 
-    return Object.keys(comments).map((id: CommentId): React$Node =>
-      <Comment key={id} commentId={id} />);
+    return (
+      <React.Fragment>
+      <CommentListHeader />
+        {
+          Object.keys(comments).map((id: CommentId): React$Node =>
+            <Comment key={id} commentId={id} />)
+        }
+      </React.Fragment>
+    );
   }
 }
 
