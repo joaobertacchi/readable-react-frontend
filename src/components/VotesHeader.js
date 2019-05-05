@@ -17,9 +17,8 @@ type OwnProps = {
 
 type Props = StyleProps & OwnProps;
 
-const styles = (theme: Object): Object => ({
+const styles = (): Object => ({
   button: {
-    margin: theme.spacing.unit,
   },
 });
 

@@ -5,9 +5,8 @@ import { IconButton } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { Edit, Delete } from '@material-ui/icons';
 
-const styles = (theme: Object): Object => ({
+const styles = (): Object => ({
   button: {
-    margin: theme.spacing.unit,
   },
 });
 
