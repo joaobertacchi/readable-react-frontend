@@ -48,7 +48,13 @@ const comments = (state: CommentsStateType = {}, action: CommentActionType): Com
         [comment.id]: comment,
       };
     }
-    case UPDATE_COMMENT:
+    case UPDATE_COMMENT: {
+      const { comment } = action;
+      return {
+        ...state,
+        [comment.id]: comment,
+      };
+    }
     default:
       return state;
   }
