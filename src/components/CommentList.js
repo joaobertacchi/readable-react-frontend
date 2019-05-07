@@ -12,6 +12,7 @@ import CommentModal from './CommentModal';
 
 type State = {
   commentOpen: boolean,
+  selectedComment: CommentType,
 };
 
 type OwnProps = {
@@ -31,6 +32,7 @@ type Props = ConnectedProps & OwnProps & StateProps;
 class CommentList extends React.Component<Props, State> {
   state = {
     commentOpen: false,
+    selectedComment: undefined,
   };
 
   state: State;
@@ -45,7 +47,17 @@ class CommentList extends React.Component<Props, State> {
   };
   
   handleClose = () => {
-    this.setState({ commentOpen: false });
+    this.setState({
+      commentOpen: false,
+      selectedComment: undefined,
+    });
+  };
+
+  editComment = (comment: CommentType) => {
+    this.setState({
+      selectedComment: comment,
+      commentOpen: true,
+    });
   };
 
   render (): React$Node {
@@ -54,20 +66,23 @@ class CommentList extends React.Component<Props, State> {
       postId,
     } = this.props;
 
-    const { commentOpen } = this.state;
+    const { commentOpen, selectedComment } = this.state;
 
     return (
       <React.Fragment>
-        <CommentModal
+        {commentOpen && <CommentModal
           modalTitle="Add new comment"
           onClose={this.handleClose}
           open={commentOpen}
-          comment={{ parentId: postId }}
-        />
+          comment={{
+            ...selectedComment,
+            parentId: postId,
+          }}
+        />}
         <CommentListHeader onOpen={this.handleOpen} />
         {
           commentIds.map((commentId: CommentId): React$Node =>
-            <Comment key={commentId} commentId={commentId} />)
+            <Comment key={commentId} commentId={commentId} editComment={this.editComment} />)
         }
       </React.Fragment>
     );

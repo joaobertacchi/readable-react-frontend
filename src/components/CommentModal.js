@@ -9,7 +9,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import ClearIcon from '@material-ui/icons/Clear';
 
 import { type CategoriesStateType } from '../types/state';
-import { type CommentType } from '../types/comment';
+import { type CommentType, type CommentId } from '../types/comment';
 import { type PostId } from '../types/post';
 import { handleAddComment, handleUpdateComment } from '../actions/comments';
 
@@ -61,6 +61,7 @@ const styles = (theme: Object): Object => ({
 type State = {
   author: string,
   body: string,
+  id: CommentId,
   parentId: PostId,
 };
 
@@ -91,11 +92,12 @@ class CommentModal extends React.PureComponent<Props, State> {
       parentId,
     } = comment || {};
     this.state = {
-      id,
+      id: id || '',
       author: author || '',
       body: body || '',
       parentId,
     };
+    console.log('CommentModal::constructor() - comment=', comment);
   }
 
   handleChange = (name: string): (SyntheticInputEvent<> => void) => (event: SyntheticInputEvent<>) => {
@@ -104,8 +106,10 @@ class CommentModal extends React.PureComponent<Props, State> {
 
   handleClear = () => {
     this.setState({
+      id: '',
       author: '',
       body: '',
+      parentId: '',
     });
   };
 

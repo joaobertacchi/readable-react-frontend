@@ -39,6 +39,7 @@ type OwnProps = {
 type DispatchProps = {
   deleteComment: Function,
   dispatchVote: Function,
+  editComment: Function,
 };
 
 type StyleProps = {
@@ -48,7 +49,7 @@ type StyleProps = {
 type Props = StateProps & OwnProps & StyleProps & DispatchProps;
 
 const Comment = (props: Props): React$Node => {
-  const { commentId, comments, classes, dispatchVote, deleteComment } = props;
+  const { commentId, comments, classes, dispatchVote, deleteComment, editComment } = props;
   const comment = comments[commentId];
   const {
     author,
@@ -59,6 +60,7 @@ const Comment = (props: Props): React$Node => {
 
   const date = new Date(timestamp).toISOString();
   const onDelete = (): void => deleteComment(commentId);
+  const onEdit = (): void => editComment(comment);
 
   return (
     <Grid item sm={12}>
@@ -75,6 +77,7 @@ const Comment = (props: Props): React$Node => {
         <div className={classes.footer}>
           <ActionButtons
             onDelete={onDelete}
+            onEdit={onEdit}
           />
           <VoteButtons
             voteScore={voteScore}
