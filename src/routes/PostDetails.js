@@ -89,6 +89,7 @@ class PostDetails extends PureComponent<Props, State> {
               post={posts[postId]}
             />
         }
+        {/* TODO: show 404 page when browsing to a invalid post */}
         <Post onEdit={this.handleOpen} postId={postId} showButtons />
         <CommentList postId={postId} />
       </div>

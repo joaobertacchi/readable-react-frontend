@@ -70,6 +70,7 @@ class App extends Component<Props, State> {
       <Router>
         <div className={classes.root}>
           <CssBaseline />
+          {/* TODO: Add navigation links */}
           <Header />
           <Route
             path='/'
