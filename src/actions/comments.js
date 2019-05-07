@@ -100,7 +100,10 @@ export const handleAddComment = (
   comment: CommentType,
 ): Function => (dispatch: Function): ?Promise<void> => {
   return API.addComment(comment)
-    .then((result: CommentType): void => dispatch(addCommentAction(result)));
+    .then((comment: CommentType) => {
+      dispatch(addCommentAction(comment));
+      dispatch(updateCommentCountAction(comment.parentId, 'inc'));
+    });
 };
 
 export const handleUpdateComment = (
