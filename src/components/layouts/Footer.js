@@ -42,7 +42,7 @@ class Footer extends React.Component<Props> {
           {loading
             ? null
             : <Tabs
-                value={selectedCategory || ''}
+                value={typeof selectedCategory === 'undefined' ? '' : selectedCategory}
                 indicatorColor="primary"
                 textColor="primary"
                 centered

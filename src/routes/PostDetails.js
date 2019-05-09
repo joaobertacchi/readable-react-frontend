@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react';
 import Post from '../components/Post';
 import CommentList from '../components/CommentList';
 import PostModal from '../components/PostModal';
+import { Footer } from '../components/layouts';
 
 import { type PostId } from '../types/post';
 import {
@@ -92,6 +93,7 @@ class PostDetails extends PureComponent<Props, State> {
         {/* TODO: show 404 page when browsing to a invalid post */}
         <Post onEdit={this.handleOpen} postId={postId} showButtons />
         <CommentList postId={postId} />
+        <Footer selectedCategory={false}/>
       </div>
     );
   };
