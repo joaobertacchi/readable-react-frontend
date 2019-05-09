@@ -97,7 +97,6 @@ class CommentModal extends React.PureComponent<Props, State> {
       body: body || '',
       parentId,
     };
-    console.log('CommentModal::constructor() - comment=', comment);
   }
 
   handleChange = (name: string): (SyntheticInputEvent<> => void) => (event: SyntheticInputEvent<>) => {

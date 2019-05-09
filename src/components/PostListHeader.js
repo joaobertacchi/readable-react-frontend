@@ -65,7 +65,6 @@ class PostListHeader extends React.Component<Props> {
             <FormControlLabel value={Constants.sortType.SCORE} control={<Radio />} label="Score" />
           </RadioGroup>
         </FormControl>
-        {/* // TODO: Add new action */}
         <Fab
           color="primary"
           aria-label="Add"
