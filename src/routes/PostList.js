@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import Post from '../components/Post';
 import { Footer } from '../components/layouts';
 import PostListHeader from '../components/PostListHeader';
+import NotFound from '../components/NotFound';
 
 import { type PostId, type SortType, Constants } from '../types/post';
 import {
@@ -16,6 +17,7 @@ import {
     type PostsStateType,
     type CategoriesStateType
 } from '../types/state';
+import { type CategoryType } from '../types/category';
 import PostModal from '../components/PostModal';
 
 const styles = (): Object => ({
@@ -81,6 +83,12 @@ class PostList extends React.PureComponent<Props, State> {
       categories,
     } = this.props;
     const { modalOpen } = this.state;
+    if (
+      selectedCategory.length > 0 &&
+      !categories.map((c: CategoryType): string => c.name).includes(selectedCategory)
+    )
+      return (<NotFound {...this.props} />);
+
     return (
         <div className={classes.main}>
           <PostModal

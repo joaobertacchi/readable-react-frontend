@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react';
 import Post from '../components/Post';
 import CommentList from '../components/CommentList';
 import PostModal from '../components/PostModal';
+import NotFound from '../components/NotFound';
 import { Footer } from '../components/layouts';
 
 import { type PostId } from '../types/post';
@@ -12,6 +13,7 @@ import {
     type CategoriesStateType,
     type PostsStateType,
 } from '../types/state';
+import { type CategoryType } from '../types/category';
 
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -38,6 +40,7 @@ type MappedProps = {
 type RouterProps = {
   match: {
     params: {
+      category: string,
       postId: PostId,
     },
   },
@@ -70,7 +73,8 @@ class PostDetails extends PureComponent<Props, State> {
       classes,
       match: {
         params: {
-          postId
+          postId,
+          category,
         },
       },
       categories,
@@ -78,6 +82,15 @@ class PostDetails extends PureComponent<Props, State> {
       loading,
     } = this.props;
     const { modalOpen } = this.state;
+    if (
+      !posts[postId]
+      || !categories.map((c: CategoryType): string => c.name).includes(category)
+      || posts[postId].category !== category
+    ) {
+      return (<NotFound {...this.props} />);
+    }
+      
+
     return (
       <div className={classes.main}>
         {loading
@@ -90,7 +103,6 @@ class PostDetails extends PureComponent<Props, State> {
               post={posts[postId]}
             />
         }
-        {/* TODO: show 404 page when browsing to a invalid post */}
         <Post onEdit={this.handleOpen} postId={postId} showButtons />
         <CommentList postId={postId} />
         <Footer selectedCategory={false}/>
