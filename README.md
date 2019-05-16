@@ -1,5 +1,27 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-<!-- TODO: Update README -->
+# Readable Project
+
+Readable is a React+Redux SPA for managing posts, comments, and tracking likes to both. It has the following 3 routes:
+
+* **/** : Home. Show all posts.
+
+* **/:category** : Show posts filtered by :category.
+
+* **/:category/:post_id** : Show post details for :post_id
+
+## TL;DR
+
+To get started developing right away:
+
+### API server (Readable Project dependency)
+* clone https://github.com/udacity/reactnd-project-readable-starter
+* `cd api-server`
+* `yarn install`
+* `yarn start`
+
+### Readable Project
+* install all project dependencies with `yarn install`
+* start the development server with `yarn start`
+* build project for production with `yarn build`
 
 ## Project Specs
 
@@ -9,7 +31,7 @@ See https://review.udacity.com/#!/rubrics/1081/view
 
 In the project directory, you can run:
 
-### `npm start`
+### `yarn start`
 
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -17,12 +39,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
+### `yarn build`
 
 Builds the app for production to the `build` folder.<br>
 It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -32,42 +49,13 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+## Project additions
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The following additional features were added to the project:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+* **Material Design**: used *@material-ui/core* and *@material-ui/icons* packages to create user interface.
+* **ESLint**: it was configured to enforce Udacity's JavaScript code style.
+* **Flow**: used flow for type checking.
+* **Pre-commit and Pre-push hooks**: used *husky* package to set pre-commit, pre-push scripts for enforcing lint and flow rules.
+* **UUID**: used *uuid* package to provide unique ids for posts and comments.
+* **Filter by Title, Date, or Score**: additional sorting rules.
