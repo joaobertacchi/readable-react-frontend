@@ -8,6 +8,7 @@ import {
   VOTE_COMMENT,
   UPDATE_COMMENT,
 } from '../actions/comments';
+import { DELETE_POST } from '../actions/posts';
 import { type CommentsStateType } from '../types/state';
 import { type CommentType, type CommentId } from '../types/comment';
 
@@ -54,6 +55,19 @@ const comments = (state: CommentsStateType = {}, action: CommentActionType): Com
         ...state,
         [comment.id]: comment,
       };
+    }
+    case DELETE_POST: {
+      const { postId } = action;
+      return Object.entries(state).reduce(
+        (acc: CommentsStateType, [key, value]: [CommentId, any]): CommentsStateType => (
+          value.parentId !== postId
+            ? {
+                ...acc,
+                [key]: value,
+              }
+            : acc),
+        {}
+      );
     }
     default:
       return state;

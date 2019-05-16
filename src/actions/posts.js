@@ -38,7 +38,7 @@ type AddPostActionType = {
   type: 'ADD_POST',
 };
 
-type DeletePostActionType = {
+export type DeletePostActionType = {
   postId: PostId,
   type: 'DELETE_POST',
 };

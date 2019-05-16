@@ -5,7 +5,7 @@ import { type CommentType } from '../types/comment';
 import { type PostId } from '../types/post';
 import { type CommentId } from '../types/comment';
 
-import { updateCommentCountAction } from './posts';
+import { updateCommentCountAction, type DeletePostActionType } from './posts';
 
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
 export const ADD_COMMENT = 'ADD_COMMENT';
@@ -50,7 +50,8 @@ export type CommentActionType =
   DeleteCommentActionType |
   UpdateCommentActionType |
   ReceiveCommentsActionType |
-  VoteCommentActionType;
+  VoteCommentActionType |
+  DeletePostActionType;
 
 export const receiveCommentsAction = (comments: Array<CommentType>): ReceiveCommentsActionType => {
   return {
